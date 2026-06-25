@@ -8,50 +8,91 @@
 import SwiftUI
 
 struct ContentView: View {
+
+    @State private var board = Array(repeating: "", count: 9)
+    @State private var isXTurn = true
+
     var body: some View {
-        ZStack{
+        ZStack {
             LinearGradient(
-                colors: [.mint, .cyan, .blue],
-                startPoint: .top, endPoint: .bottom
+                colors: [.black, .cyan, .gray],
+                startPoint: .top,
+                endPoint: .bottom
             )
-            
-                .ignoresSafeArea()
-            
-            VStack {
-                CallView()
-                CallView()
-                CallView()
+            .ignoresSafeArea()
 
-            }
-            .padding()
-            .background(.ultraThinMaterial)
-            .cornerRadius(55)
-            .shadow(radius: 100)
-        }
-        
-            
-    }
-}
+            VStack(spacing: 20) {
 
-struct CallView: View {
-    var body: some View {
-        HStack{
-            ForEach(0..<3){ _ in
-                ZStack{
-                    Circle()
-                        .foregroundStyle(.white)
-                    Image(systemName: "circle")
-                        .resizable()
-                        .frame(width: 100, height: 100, alignment: .center)
+                Text("Tic-Tac-Toe")
+                    .font(.system(size: 40, weight: .bold, design: .rounded))
+                    .foregroundStyle(.black)
+                    .opacity(0.5)
+
+                LazyVGrid(
+                    columns: Array(repeating: GridItem(.flexible()), count: 3),
+                    spacing: 15
+                ) {
+                    ForEach(0..<9, id: \.self) { index in
+
+                        Button {
+                            if board[index].isEmpty {
+                                board[index] = isXTurn ? "xmark" : "circle"
+                                isXTurn.toggle()
+                            }
+                        } label: {
+                            ZStack {
+                                Circle()
+                                    .fill(.white)
+                                    .frame(width: 90, height: 90)
+
+                                if !board[index].isEmpty {
+                                    Image(systemName: board[index])
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 30, height: 30)
+                                        .foregroundStyle(.black)
+                                }
+                            }
+                            .opacity(0.5)
+                        }
+                    }
                 }
-                
+                .padding()
+
+                Text(isXTurn ? "X Turn" : "O Turn")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.black)
+                    .opacity(0.5)
+
+                Button {
+                    resetGame()
+                } label: {
+                    Text("RESET")
+                        .font(.system(size: 24,
+                                      weight: .bold,
+                                      design: .rounded))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 40)
+                        .padding(.vertical, 12)
+                        .background(.black.opacity(0.4))
+                        .clipShape(Capsule())
+                }
             }
-        }.padding()
+            .padding(30)
+            .background(.ultraThinMaterial.opacity(0.4))
+            .cornerRadius(30)
+            .shadow(radius: 20)
+            .padding()
+        }
+    }
+
+    func resetGame() {
+        board = Array(repeating: "", count: 9)
+        isXTurn = true
     }
 }
-
 
 #Preview {
     ContentView()
 }
-

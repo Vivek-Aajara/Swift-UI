@@ -18,30 +18,41 @@ struct Board: View {
         ]
     
     var body: some View {
-        VStack(spacing: 20){
-            Text("Tic Tac toe")
-                .font(.largeTitle)
-                .bold()
-                .foregroundStyle(.white)
-            
-            LazyVGrid(columns: columns, spacing: 12){
-                ForEach(0..<9, id: \.self){
-                    index in BoardCall(value: board[index]){
-                        hendleTap(at: index)
+        ZStack{LinearGradient(
+            colors: [.black, .cyan, .gray],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+            VStack{
+                Text("Tic Tac Toe")
+                    .font(.largeTitle)
+                    .bold()
+                    .foregroundStyle(.black)
+                    .opacity(0.5)
+                
+                LazyVGrid(columns: columns, spacing: 12){
+                    ForEach(0..<9, id: \.self){
+                        index in BoardCall(value: board[index]){
+                            hendleTap(at: index)
+                        }
                     }
-                }
-            }.padding()
-            
-            
-            Button("Restart Game"){
-                board = Array(repeating: nil, count: 9)
-                isXTurn = true
-            }.font(.headline)
-                .foregroundStyle(.white)
+                }.padding()
+                
+                
+                Button("Restart Game"){
+                    board = Array(repeating: nil, count: 9)
+                    isXTurn = true
+                }.font(.headline)
+                 .foregroundStyle(.black)
+                 .frame(width: 60, height: 80)
+                 .opacity(0.5)
+            }
+            .padding()
+            .background(.ultraThinMaterial.opacity(0.2))
+            .cornerRadius(55)
+            .shadow(radius: 100)
         }
-        .background(.black)
-        .padding()
-        
+        .ignoresSafeArea()
             
         
        
@@ -64,10 +75,13 @@ struct BoardCall: View {
                 Image(systemName: value ? "circle": "x.circle")
                     .resizable()
                     .scaledToFit()
-                    .frame( width: 85, height: 85, alignment: .center)
+                    .frame( width: 80, height: 80, alignment: .center)
                     .foregroundStyle(.black)
             }
-        }.onTapGesture{
+        }
+        .padding()
+        .opacity(0.5)
+        .onTapGesture{
             onTap()
     }
     }

@@ -8,37 +8,41 @@
 import SwiftUI
 
 struct InputList: View {
-    @AppStorage("firstName") private var userName: String = "Vivek"
+    @AppStorage("firstName") private var userName: String = ""
     @State private var fruitsArr = [
         "Apples",
         "Oranges",
         "Coconut",
         "Raspberry",
         "Banana",
-        "Coldwater",
         "Blueberry",
+        
     ]
-    @State private var InputText: String
+    
+    @State private var InputText: String = ""
     var body: some View {
-        NavigationView{
+        NavigationStack{
             VStack{
                 List{
                     ForEach(fruitsArr, id: \.self) {fruit in
-                        Text(fruit).frame(height: 40)
+//                        Text(fruit).frame(height: 40)
+                        NavigationLink("\(fruit)", destination: DetailList(fruitName: fruit))
                     }.onDelete(perform: swipeToDelete)
 
                 }
-                .navigationTitle(userName.isEmpty ? "Welcome \(userName)" :("Fruits"))
+                .navigationTitle(userName.isEmpty ? "Fruits" :
+                                    "Welcome\(userName)")
                 .navigationBarTitleDisplayMode(.automatic)
                 .foregroundColor(.green)
                 
                 TextField("Enter new Fruit", text: $InputText )
                     .onSubmit {
-                        fruitsArr.append(InputText)
+                        if !InputText.isEmpty{
+                            fruitsArr.append(InputText)
+                            InputText = ""
+                        }
                             
                     }
-            }.onTapGesture {
-                print("tapped")
             }
         }
     }

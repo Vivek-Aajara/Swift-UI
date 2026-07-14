@@ -8,13 +8,21 @@
 import SwiftUI
 
 struct DetailList: View {
-    @Binding var selectedRow: String
-    
+    let fruitName: String
     var body: some View {
-        Text("selectedRow: \(selectedRow)")
+        VStack(spacing: 10){
+            Text(fruitName).fontWeight(.bold)
+            
+            Image(fruitName).resizable().frame(width: 100, height: 100)
+            
+            Text  ("Your selected fruit is: \(fruitName)").foregroundStyle(.secondary)
+        }.padding()
+            .navigationTitle(fruitName)
     }
 }
 
-//#Preview {
-//    DetailList(selectedRow: "")
-//}
+#Preview {
+    NavigationStack{
+        DetailList(fruitName: "Apple")
+    }
+}
